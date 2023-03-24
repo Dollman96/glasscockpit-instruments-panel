@@ -1,0 +1,872 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Gauge Test</title>
+    <link rel="stylesheet" href="fonts.css">
+    <script src="gauge.min.js"></script>
+    <script src="drawings.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+    <script src="Chart.LinearGauge.js"></script>
+    <style>
+        .box{
+            width: 99vw;
+            height: 99vh;
+            border: 5px solid gray;
+            border-radius: 45% 45% 0 0;
+            z-index: 1000;
+           
+        }
+        .primary-flight-display{
+            width: 750px;
+            height: 300px;
+            border: 2px solid #ffffff7f !important;
+            border-radius: 30px;
+            display: block;
+            background-color: aqua;
+            margin-left: 60px;
+            margin-top: 30px;
+        }
+        #anemometre{
+            margin-left: 7vw;
+            margin-top: 10vh;
+        }
+    </style>
+</head>
+<body style="background: #fff">
+
+<!-- <button onclick="animateGauges()">Animate</button>
+<button onclick="stopGaugesAnimation()">Stop animation</button>
+<input type="text" id="gauge-size" value="400">
+<button onclick="resize()">Resize</button>
+<input type="text" id="gauge-text" value="ERROR">
+<button onclick="setText()">Set value text</button>
+<button onclick="document.location.reload()">Reset</button>
+
+<hr> -->
+<div class="box">
+<!-- angle de roulis -->
+<div >
+    <canvas id="roll"
+    data-type="radial-gauge"
+    data-width="600"
+    data-height="300"
+    data-units="Roll °C"
+    data-min-value="0"
+    data-start-angle="90"
+    data-ticks-angle="180"
+    data-value-box="false"
+    data-max-value="90"
+    data-major-ticks="[-90,-60,-30,0,30,60,90]"
+    data-minor-ticks="2"
+    data-stroke-ticks="false"
+    data-highlights='[
+        {"from": 60, "to": 61, "color": "red"}
+    ]'
+    data-color-plate="#fff"
+    data-border-shadow-width="0"
+    data-borders="false"
+    data-needle-type="line"
+    data-needle-start="70"
+    data-needle-start="80"
+    data-needle-width="5"
+    data-needle-circle-size="2"
+    data-needle-circle-outer="false"
+    data-needle-circle-inner="false"
+    data-bar-start-position="middle"
+    data-animation-duration="1500"
+    data-animation-rule="linear"
+    data-animation-target="plate"
+></canvas>
+<!-- assiette de montée -->
+<canvas id="pitch"
+    data-type="linear-gauge"
+    data-width="120"
+    data-height="250"
+    data-value="0"
+    data-value-start="3"
+    data-min-value="-20"
+    data-max-value="20"
+    data-highlights="false"
+    data-exact-ticks="false"
+    data-value-box="true"
+    data-value-box-width="20"
+    data-value-box-margin-top="50"
+    data-major-ticks="[-20,-10,0,-10,-20]"
+    data-ticks-padding="-1"
+    data-minor-ticks="2"
+    data-stroke-ticks="false"
+    data-color-plate="#fff"
+    data-border-shadow-width="0"
+    data-borders="false"
+    data-bar-begin-circle="false"
+    data-tick-side="both"
+    data-number-side="both"
+    data-needle-side="both"
+    data-numbers-margin="-1"
+    data-needle-type="line"
+    data-needle-width="3"
+    data-color-needle="red"
+    data-color-needle-end="#222"
+    data-animation-duration="1500"
+    data-animation-rule="linear"
+    data-animation-target="plate"
+    data-bar-width="false"
+    data-bar-color="false"
+    data-bar-stroke="false"
+    data-ticks-width="40"
+    data-ticks-width-minor="20"
+    style="left: 20rem; margin-top: -17%;"
+    
+></canvas>
+</div>
+<!-- Altimetre -->
+<canvas id="altimetre"
+    data-type="linear-gauge"
+    data-width="150"
+    data-height="400"
+    data-min-value="0"
+    data-max-value="6000"
+    data-value="5500"
+    data-major-ticks="0,1000,2000,3000,4000,5000,6000"
+    data-minor-ticks="10"
+    data-stroke-ticks="true"
+    data-color-plate="#fff"
+    data-border-shadow-width="0"
+    data-borders="false"
+    data-bar-begin-circle="false"
+    data-tick-side="right"
+    data-number-side="right"
+    data-needle-side="right"
+    data-needle-type="line"
+    data-needle-width="3"
+    data-color-needle="red"
+    data-color-needle-end="red"
+    data-animation-duration="1500"
+    data-animation-rule="linear"
+    data-animation-target="plate"
+    data-bar-width="5"
+    data-bar-progress="true"
+    data-color-bar-progress='[ {"from": 0, "to": 5000, "color": "rgb(17, 237, 17)"}, {"from": 5000, "to": 6000, "color": "rgba(255, 0, 1)"} ]'
+    data-highlights='[ {"from": 0, "to": 5000, "color": "rgb(17, 237, 17)"}, {"from": 5000, "to": 6000, "color": "rgba(255, 0, 1)"} ]'
+    data-color-plate="#fff"
+    data-ticks-width="40"
+    data-ticks-width-minor="25"
+    data-value-box-stroke="0"
+    data-color-value-box-shadow="0" 
+    data-value-box-border-radius="0" 
+    data-value-text-shadow="0"
+    data-color-value-box-background="transparent"
+></canvas>
+<!-- Anemometre-->
+<canvas id="Anemometre"
+    data-type="linear-gauge"
+    data-width="150"
+    data-height="400"
+    data-min-value="0"
+    data-max-value="1000"
+    data-value="500"
+    data-major-ticks="0,100,200,300,400,500,600,700,800,900,1000"
+    data-minor-ticks="10"
+    data-stroke-ticks="true"
+    data-color-plate="#fff"
+    data-border-shadow-width="0"
+    data-borders="false"
+    data-bar-begin-circle="false"
+    data-tick-side="left"
+    data-number-side="left"
+    data-needle-side="left"
+    data-needle-type="line"
+    data-needle-width="3"
+    data-color-needle="red"
+    data-color-needle-end="red"
+    data-animation-duration="1500"
+    data-animation-rule="linear"
+    data-animation-target="plate"
+    data-bar-width="5"
+    data-bar-color='[ {"from": 0, "to": 700, "color": "rgb(17, 237, 17)"}, {"from": 700, "to": 1000, "color": "rgba(255, 0, 1)"} ]'
+    data-highlights='[ {"from": 0, "to": 700, "color": "rgb(17, 237, 17)"}, {"from": 700, "to": 1000, "color": "rgba(255, 0, 1)"} ]'
+    data-color-plate="#fff"
+    data-ticks-width="40"
+    data-ticks-width-minor="25"
+    data-value-box-stroke="0"
+    data-color-value-box-shadow="0" 
+    data-value-box-border-radius="1" 
+    data-value-text-shadow="0"
+    data-color-value-box-background="transparent"
+></canvas>
+<!-- Variometre-->
+<canvas id="Variometre--"
+data-type="radial-gauge"
+data-width="600"
+data-height="300"
+data-units="ft/min"
+data-min-value="-1000"
+data-max-value="1000"
+data-start-angle="90"
+data-ticks-angle="180"
+data-color-numbers="black"
+data-value-box="true"
+data-font-numbers-size="20"
+data-font-numbers-style="italic"
+data-value-box-padding-left="50"
+data-color-value-box-rect="#fff"
+data-color-value-box-rect-end="#fff"
+data-color-value-box-background="#1b02f7"
+data-color-value-box-shadow="false"
+data-color-value-text-shadow="false"
+data-major-ticks="[-1000,-800,-600,-400,-200,0,200,400,600,800,1000]"
+data-minor-ticks="2"
+data-stroke-ticks="true"
+data-highlights='[
+    {"from": -900, "to": -600, "color": "red"},{"from": 600, "to": 900, "color": "red"}
+]'
+data-color-plate="#fff"
+data-border-shadow-width="0"
+data-borders="false"
+data-needle-type="line"
+data-needle-start="70"
+data-needle-start="80"
+data-needle-width="5"
+data-needle-circle-size="2"
+data-needle-circle-outer="false"
+data-needle-circle-inner="false"
+data-bar-start-position="middle"
+data-animation-duration="1500"
+data-animation-rule="linear"
+data-animation-target="plate"
+></canvas>
+<!-- Conservateur de Cap -->
+<canvas id="conservateurcap" 
+                    data-type="radial-gauge"
+                    data-width="200"
+                    data-height="200"
+                    data-min-value="0"
+                    data-max-value="360"
+                    data-major-ticks="0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360"
+                    data-minor-ticks="10"
+                    data-ticks-angle="360"
+                    data-start-angle="180"
+                    data-stroke-ticks="false"
+                    data-highlights="false"
+                    data-color-plate="#222"
+                    data-color-major-ticks="#f5f5f5"
+                    data-color-minor-ticks="#ddd"
+                    data-color-numbers="#ccc"
+                    data-color-needle="rgba(240, 128, 128, 1)"
+                    data-color-needle-end="rgba(255, 160, 122, .9)"
+                    data-value-box="true"
+                    data-value="100°"
+                    data-value-text-shadow="0"
+                    data-value-box-stroke="1"
+                    data-value-box-border-radius="0" 
+                    data-color-circle-inner="#fff"
+                    data-color-needle-circle-outer="#ccc"
+                    data-needle-circle-size="15"
+                    data-needle-circle-outer="false"
+                    data-animation-rule="linear"
+                    data-needle-type="line"
+                    data-needle-start="75"
+                    data-needle-end="99"
+                    data-needle-width="3"
+                    data-borders="true"
+                    data-border-inner-width="0"
+                    data-border-middle-width="0"
+                    data-border-outer-width="10"
+                    data-color-border-outer="#ccc"
+                    data-color-border-outer-end="#ccc"
+                    data-color-needle-shadow-down="#222"
+                    data-border-shadow-width="0"
+                    data-font-value="Led"
+            ></canvas>
+            <!-- RPM -->
+<canvas id="RPM"
+            data-type="radial-gauge"
+            data-width="200"
+            data-height="200"
+            data-units="x100tr/min"
+            data-title="RPM"
+            data-min-value="0"
+            data-max-value="30"
+            data-value="16"
+            data-animate-on-init="true"
+            data-major-ticks="0,5,10,15,20,25,30"
+            data-minor-ticks="2"
+            data-stroke-ticks="true"
+            data-highlights='[{"from": 20, "to": 22.5, "color": "rgba(249, 249, 31, 0.877)"},{"from": 22.5, "to": 26, "color": "rgb(17, 237, 17)"},{"from": 26, "to": 26.9, "color": "rgba(249, 249, 31, 0.877)"},{"from": 26.9, "to": 27, "color": " rgb(234, 32, 32)"}]'
+            data-color-plate="#222"
+            data-color-major-ticks="#f5f5f5"
+            data-color-minor-ticks="#ddd"
+            data-color-title="#fff"
+            data-color-units="#ccc"
+            data-color-numbers="#eee"
+            data-color-needle-start="rgba(240, 128, 128, 1)"
+            data-color-needle-end="rgba(255, 160, 122, .9)"
+            data-value-box="true"
+            data-font-value="Repetition"
+            data-font-numbers="Repetition"
+            data-animated-value="true"
+            data-borders="false"
+            data-border-shadow-width="0"
+            data-needle-type="arrow"
+            data-needle-width="2"
+            data-needle-circle-size="7"
+            data-needle-circle-outer="true"
+            data-needle-circle-inner="false"
+            data-animation-duration="1500"
+            data-animation-rule="linear"
+            data-ticks-angle="250"
+            data-start-angle="55"
+            data-color-needle-shadow-down="#333"
+            data-value-box-width="20"
+            ></canvas>
+            <!-- Pression d'admission MANIFOLD PRESSURE -->
+            <canvas id="manifold-pressure"
+            data-type="radial-gauge"
+            data-width="200"
+            data-height="200"
+            data-units="IN"
+            data-title="MAN
+            IN"
+            data-min-value="10"
+            data-max-value="30"
+            data-value="16"
+            data-animate-on-init="true"
+            data-major-ticks="10,15,20,25,30"
+            data-minor-ticks="0"
+            data-stroke-ticks="true"
+            data-highlights="false"
+            data-color-plate="#222"
+            data-color-major-ticks="#f5f5f5"
+            data-color-minor-ticks="#ddd"
+            data-color-title="#fff"
+            data-color-units="#ccc"
+            data-color-numbers="#eee"
+            data-color-needle-start="rgba(240, 128, 128, 1)"
+            data-color-needle-end="rgba(255, 160, 122, .9)"
+            data-value-box="true"
+            data-font-value="Repetition"
+            data-font-numbers="Repetition"
+            data-animated-value="true"
+            data-borders="false"
+            data-border-shadow-width="0"
+            data-needle-type="arrow"
+            data-needle-width="2"
+            data-needle-circle-size="7"
+            data-needle-circle-outer="true"
+            data-needle-circle-inner="false"
+            data-animation-duration="1500"
+            data-animation-rule="linear"
+            data-ticks-angle="250"
+            data-start-angle="55"
+            data-color-needle-shadow-down="#333"
+            data-value-box-width="45"
+            ></canvas>
+            <!-- Accelerometre -->
+            <canvas id="Accelerometre "
+            data-type="radial-gauge"
+            data-width="200"
+            data-height="200"
+            data-units="g units"
+            data-title="Acceleration"
+            data-min-value="-4"
+            data-max-value="10"
+            data-value="1"
+            data-animate-on-init="true"
+            data-major-ticks="-4,-2,0,2,4,6,8,10"
+            data-minor-ticks="2"
+            data-stroke-ticks="true"
+            data-highlights='[{"from": -3, "to": 3.8, "color": "rgb(17, 237, 17)"}]'
+            data-color-plate="#222"
+            data-color-major-ticks="#f5f5f5"
+            data-color-minor-ticks="#ddd"
+            data-color-title="#fff"
+            data-color-units="#ccc"
+            data-color-numbers="#eee"
+            data-color-needle-start="rgba(240, 128, 128, 1)"
+            data-color-needle-end="rgba(255, 160, 122, .9)"
+            data-value-box="true"
+            data-font-value="Repetition"
+            data-font-numbers="Repetition"
+            data-animated-value="true"
+            data-borders="false"
+            data-border-shadow-width="0"
+            data-needle-type="arrow"
+            data-needle-width="2"
+            data-needle-circle-size="7"
+            data-needle-circle-outer="true"
+            data-needle-circle-inner="false"
+            data-animation-duration="1500"
+            data-animation-rule="linear"
+            data-ticks-angle="250"
+            data-start-angle="55"
+            data-color-needle-shadow-down="#333"
+            data-value-box-width="45"
+            ></canvas>
+            <div style="width: 20%; float: left; padding: 20px;">
+                <p>OIL Temperature</p>
+                <canvas id="canvas10" height="408" width="981" style="width: 981px; height: 408px;"></canvas>
+            </div>
+            <div style="width: 20%; float: left; padding: 20px;">
+                <p>OIL PRESSURE</p>
+                <canvas id="canvas11" height="408" width="981" style="width: 981px; height: 408px;"></canvas>
+            </div>
+            <div style="width: 50%; float: left; padding: 20px;">
+                <!-- Fuel Quantity -->
+                <p>Fuel Quantity</p>
+                <div style="display: block; float: left; width: 45%;">
+                    <canvas id="canvas9" height="408" width="981" style="width: 981px; height: 408px;"></canvas>
+                </div>
+            </div>
+     
+          
+</div>
+<!-- configuration gauge lineaire chart js pour tester l'animation de la jauge-->
+<script>
+    var randomScalingFactor = function(k) {
+        return Math.round(Math.random() * k)
+    };
+    </script>
+     <script>
+        // Fuel Flow
+        
+    var barChartData9 = [];
+    barChartData9.push({
+        value: 0,
+        indicator: 'point',
+        shape: 'inverted-triangle',
+        width: 12,
+        height: 12,
+        offset: -30,
+        color: 'red',
+        label: 'LEFT'
+    });
+    barChartData9.push({
+        value: 0,
+        indicator: 'point',
+        shape: 'triangle',
+        width: 12,
+        height: 12,
+        offset: 17,
+        color: 'green',
+        label: 'RIGHT'
+    });
+        // Oil Temperature
+        var barChartData10 = [];
+        barChartData10.push({
+            value: 0,
+            indicator: 'point',
+            shape: 'triangle',
+            width: 10,
+            height: 25,
+            offset: 8,
+            color: '#1b02f7',
+            colorRanges: [ {
+                startpoint: 0,
+                breakpoint: 110,
+                color: 'yellow'
+            }, {
+                startpoint: 110,
+                breakpoint: 245,
+                color: 'green'
+            }, {
+                startpoint: 245,
+                breakpoint: 300,
+                color: 'red'
+            }],
+            tooltipRanges: [{
+                startpoint: 0,
+                breakpoint: 110,
+                tooltip: 'Very Low'
+            }, {
+                startpoint: 110,
+                breakpoint: 245,
+                tooltip: 'Normal'
+            }, {
+                startpoint: 245,
+                breakpoint: 300,
+                tooltip: 'High'
+            }]
+        });
+        barChartData10.push({
+            value: 110,
+            indicator: 'point',
+            shape: 'inverted-triangle',
+            width: 9,
+            height: 12,
+            offset: -16,
+            color: '#a9abb8'
+        });
+        barChartData10.push({
+            value: 245,
+            indicator: 'point',
+            shape: 'inverted-triangle',
+            width: 9,
+            height: 12,
+            offset: -16,
+            color: '#a9abb8'
+        });
+        // Oil Pressure
+        var barChartData11= [];
+        barChartData11.push({
+            value: 0,
+            indicator: 'point',
+            shape: 'triangle',
+            width: 10,
+            height: 25,
+            offset: 8,
+            color: '#1b02f7',
+            colorRanges: [{
+                startpoint: 0,
+                breakpoint: 60,
+                color: 'yellow'
+            }, {
+                startpoint: 60,
+                breakpoint: 90,
+                color: 'green'
+            }, {
+                startpoint: 90,
+                breakpoint: 100,
+                color: 'red'
+            }],
+            tooltipRanges: [{
+                startpoint: 0,
+                breakpoint: 60,
+                tooltip: 'Very Low',
+                color: 'yellow'
+            }, {
+                startpoint: 60,
+                breakpoint: 90,
+                tooltip: 'Normal',
+                color: 'green'
+            }, {
+                startpoint: 90,
+                breakpoint: 100,
+                tooltip: 'High',
+                color: 'red'
+            }]
+        });
+        barChartData11.push({
+            value: 60,
+            indicator: 'point',
+            shape: 'inverted-triangle',
+            width: 9,
+            height: 12,
+            offset: -16,
+            color: '#a9abb8'
+        });
+        barChartData11.push({
+            value: 90,
+            indicator: 'point',
+            shape: 'inverted-triangle',
+            width: 9,
+            height: 12,
+            offset: -16,
+            color: '#a9abb8'
+        });
+
+     
+        
+       
+
+        </script>
+        <script>
+        window.onload = function() {
+       // Fuel quantity
+             var ctx9 = document.getElementById("canvas9").getContext("2d");
+        window.myBar9 = new Chart(ctx9).Linear(barChartData9, {
+            range: {
+                startValue: 0,
+                endValue: 20
+            },
+            responsive: true,
+            animationEasing: "easeOutElastic",
+            axisColor: '#c5c7cf',
+            axisWidth: 6,
+            geometry: 'horizontal',
+            majorTicks: {
+                interval: 10,
+                width: 10,
+                height: 1,
+                offset: 0,
+                color: '#000'
+            },
+            minorTicks: {
+                interval: 5,
+                width: 4,
+                height: 2,
+                offset: 0,
+                color: '#e1f305'
+            },
+            tickLabels: {
+                interval: 5,
+                units: 'Gl'
+            },
+            multiTooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>",
+            legendTemplate: '<% for (var i=0; i<datasets.length; i++) { %>' + '<div style="display: block; width: 100%; height: 30px;">' + '<div style=\"background-color:<%=datasets[i].bar.fillColor%>;' + 'display: block; float: left; margin: 6px; width: 15px; height: 15px;\"></div>' + '<span style=\" display: block; float: left; margin: 6px; \">' + '<% if (datasets[i].bar.label) { %><%= datasets[i].bar.label %><% } %>' + '</span>' + '</div>' + '<% } %>'
+
+        });
+        setInterval(function() {
+            window.myBar9.datasets[0].value = randomScalingFactor(20) - 1;
+            window.myBar9.datasets[1].value = randomScalingFactor(20) - 1;
+            window.myBar9.datasets[2].value = randomScalingFactor(20) - 1;
+            window.myBar9.update();
+        }, 10000);
+        var leg9 = document.createElement("div");
+        leg9.setAttribute('id', 'legend-9-holder');
+        leg9.innerHTML = window.myBar9.generateLegend();
+        document.getElementById("canvas9").parentNode.parentNode.appendChild(leg9);
+        window.Chart.helpers.each(leg9.getElementsByTagName('span'), function(node, ind) {
+            window.Chart.helpers.addEvent(node, "mouseover", function() {
+                var activeSegment = window.myBar9.datasets[ind];
+                activeSegment.bar.save();
+                window.myBar9.showTooltip([activeSegment.bar]);
+                activeSegment.bar.restore();
+            });
+        }, this);
+        window.Chart.helpers.each(leg9.getElementsByTagName('span'), function(node, ind) {
+            window.Chart.helpers.addEvent(node, "mouseout", function() {
+                window.myBar9.draw();
+                window.myBar9.activeElements = [];
+            });
+        }, this);
+    
+            var ctx10 = document.getElementById("canvas10").getContext("2d");
+            window.myBar10 = new Chart(ctx10).Linear(barChartData10, {
+                range: {
+                    startValue: 0,
+                    endValue: 300
+                },
+                responsive: true,
+                animationSteps: 90,
+                axisColor: '#c5c7cf',
+                axisWidth: 6,
+                majorTicks: {
+                    interval: 50,
+                    width: 8,
+                    height: 1,
+                    offset: 1,
+                    color: '#000'
+                },
+                minorTicks: {
+                    interval: 25,
+                    width: 3,
+                    height: 1,
+                    offset: 0,
+                    color: '#000'
+                },
+                tickLabels: {
+                    interval: 50,
+                    units: '°F',
+                    offset: 0
+                },
+                geometry: 'horizontal',
+                scaleColorRanges: [  {
+                    start: 0,
+                    end: 110,
+                    color: 'yellow',
+                    label:'faible'
+                }, {
+                    start: 110,
+                    end: 245,
+                    color: 'green',
+                    label:'Normal'
+                }, {
+                    start: 245,
+                    end: 300,
+                    color: 'red',
+                    label:'trop élevé'
+                }],
+            });
+            setInterval(function() {
+                window.myBar10.datasets[0].value = randomScalingFactor(280) - 10;
+                window.myBar10.update();
+            }, 10000);
+            // New one
+            var ctx11 = document.getElementById("canvas11").getContext("2d");
+            window.myBar11 = new Chart(ctx11).Linear(barChartData11, {
+                range: {
+                    startValue: 0,
+                    endValue: 100
+                },
+                responsive: true,
+                animationSteps: 90,
+                axisColor: '#c5c7cf',
+                axisWidth: 6,
+                majorTicks: {
+                    interval: 50,
+                    width: 8,
+                    height: 1,
+                    offset: 1,
+                    color: '#000'
+                },
+                minorTicks: {
+                    interval: 25,
+                    width: 3,
+                    height: 1,
+                    offset: 0,
+                    color: '#000'
+                },
+                tickLabels: {
+                    interval: 50,
+                    units: 'PSI',
+                    offset: 0
+                },
+                geometry: 'horizontal',
+                scaleColorRanges: [ {
+                    start: 0,
+                    end: 60,
+                    color: 'yellow',
+                    label:'Basse pression'
+                }, {
+                    start: 60,
+                    end: 90,
+                    color: 'green',
+                    label:'Normal'
+                }, {
+                    start: 90,
+                    end: 100,
+                    color: 'red',
+                    label:'Surpression'
+                }],
+            });
+            setInterval(function() {
+                window.myBar11.datasets[0].value = randomScalingFactor(280) - 140;
+                window.myBar11.update();
+            }, 10000);
+        //    second new one
+
+            // Temperature cylindre
+ 
+    
+        }
+        </script>
+        <span id="buffer-extension-hover-button" style="display: none;position: absolute;z-index: 8675309;width: 100px;height: 25px;background-image: url(http://static.bufferapp.com/images/extensions/img/buffer-hover-icon@1x.png);background-size: 100px 25px;opacity: 0.9;cursor: pointer;"></span></body>
+    
+
+<script>
+    var gauge = new RadialGauge({
+    renderTo: 'canvas-id',
+    width: 300,
+    height: 300,
+    units: "Km/h",
+    minValue: 0,
+    startAngle: 0,
+    ticksAngle: 180,
+    valueBox: false,
+    maxValue: 220,
+    majorTicks: [
+        "0",
+        "20",
+        "40",
+        "60",
+        "80",
+        "100",
+        "120",
+        "140",
+        "160",
+        "180",
+        "200",
+        "220"
+    ],
+    minorTicks: 2,
+    strokeTicks: true,
+    highlights: [
+        {
+            "from": 160,
+            "to": 220,
+            "color": "rgba(200, 50, 50, .75)"
+        }
+    ],
+    colorPlate: "#fff",
+    borderShadowWidth: 0,
+    borders: false,
+    needleType: "arrow",
+    needleWidth: 2,
+    needleCircleSize: 7,
+    needleCircleOuter: true,
+    needleCircleInner: false,
+    animationDuration: 1500,
+    animationRule: "linear",
+    animationTarget: "plate"
+}).draw();
+// linear gauge configuration
+
+if (!Array.prototype.forEach) {
+    Array.prototype.forEach = function(cb) {
+        var i = 0, s = this.length;
+        for (; i < s; i++) {
+            cb && cb(this[i], i, this);
+        }
+    }
+}
+
+document.fonts && document.fonts.forEach(function(font) {
+    font.loaded.then(function() {
+        if (font.family.match(/Led/)) {
+            document.gauges.forEach(function(gauge) {
+                gauge.update();
+                gauge.options.renderTo.style.visibility = 'visible';
+            });
+        }
+    });
+});
+
+var timers = [];
+
+function animateGauges() {
+    document.gauges.forEach(function(gauge) {
+        timers.push(setInterval(function() {
+            gauge.value = Math.random() *
+                (gauge.options.maxValue - gauge.options.minValue) +
+                gauge.options.minValue;
+        }, gauge.animation.duration + 50));
+    });
+}
+
+function stopGaugesAnimation() {
+    timers.forEach(function(timer) {
+        clearInterval(timer);
+    });
+}
+
+function resize() {
+    var size = parseFloat(document.getElementById('gauge-size').value) || 400;
+
+    document.gauges.forEach(function (gauge) {
+        gauge.update({ width: size, height: size });
+    });
+}
+
+function setText() {
+    var text = document.getElementById('gauge-text').value;
+
+    document.gauges.forEach(function (gauge) {
+        gauge.update({ valueText: text });
+    });
+}
+// Définir la fonction pour dessiner une valeur sur un indicateur linéaire
+function drawLinearGaugeValue(gauge, value) {
+  // Obtenir le contexte de dessin du canevas
+  const context = gauge.canvas.getContext("2d");
+
+  // Définir les options génériques pour la boîte de valeur
+  const options = {
+    backgroundColor: "#eeeeee",
+    textColor: "#000000",
+  };
+
+  // Dessiner la boîte de valeur avec la valeur fournie
+  drawValueBox(context, options, value, 150, 85, gauge.options.maxValue);
+
+  // Mettre à jour l'aiguille de l'indicateur avec la nouvelle valeur
+  gauge.value = value;
+
+  // Animer l'indicateur pour afficher la nouvelle valeur
+  gauge.animate(gauge.options.animationTarget);
+}
+
+</script>
+</body>
+</html>
